@@ -1,7 +1,7 @@
 {
   "key": "po-assist-agent",
   "name": "PO Assist Agent",
-  "baseUrl": "jira-sample-agent-production.up.railway.app",
+  "baseUrl": "https://jira-sample-agent-production.up.railway.app",
   "authentication": {
     "type": "none"
   },
