@@ -1,0 +1,27 @@
+{
+  "key": "po-assist-agent",
+  "name": "PO Assist Agent",
+  "baseUrl": "https://your-deployment-url",
+  "authentication": {
+    "type": "none"
+  },
+  "lifecycle": {
+    "installed": "/installed"
+  },
+  "scopes": [
+    "read", "write"
+  ],
+  "modules": {
+    "generalPages": [
+      {
+        "key": "po-assist-page",
+        "location": "system.top.navigation.bar",
+        "name": {
+          "value": "PO Assistant"
+        },
+        "url": "/",
+        "conditions": []
+      }
+    ]
+  }
+}
