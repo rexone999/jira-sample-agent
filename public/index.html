@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PO-Assist Chatbot</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: "Segoe UI", sans-serif;
+      background: #f4f6f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .chat-container {
+      width: 900px;
+      height: 600px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background-color: #3f51b5;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: bold;
+    }
+
+    #chat-box {
+      flex-grow: 1;
+      padding: 1rem;
+      overflow-y: auto;
+      background-color: #f9f9f9;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .message {
+      margin: 0.4rem 0;
+      padding: 0.6rem 1rem;
+      border-radius: 16px;
+      max-width: 80%;
+      line-height: 1.4;
+      font-size: 0.95rem;
+      word-wrap: break-word;
+    }
+
+    .user-message {
+      background-color: #d1f2eb;
+      align-self: flex-end;
+      text-align: right;
+    }
+
+    .bot-message {
+      background-color: #e8eaf6;
+      align-self: flex-start;
+      text-align: left;
+    }
+
+    .input-container {
+      display: flex;
+      padding: 0.75rem;
+      border-top: 1px solid #ccc;
+      background-color: #fff;
+    }
+
+    #prompt {
+      flex-grow: 1;
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    #send-btn {
+      padding: 0.6rem 1.2rem;
+      margin-left: 0.5rem;
+      background-color: #3f51b5;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #send-btn:hover {
+      background-color: #303f9f;
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: #bbb;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">PO-Assist Chatbot</div>
+    <div id="chat-box"></div>
+    <div class="input-container">
+      <input type="text" id="prompt" placeholder="Type your message..." />
+      <button id="send-btn">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const chatBox = document.getElementById("chat-box");
+    const promptInput = document.getElementById("prompt");
+
+    document.getElementById("send-btn").addEventListener("click", async () => {
+      const prompt = promptInput.value.trim();
+      if (!prompt) return;
+
+      // User message
+      const userMsg = document.createElement("div");
+      userMsg.className = "message user-message";
+      userMsg.textContent = prompt;
+      chatBox.appendChild(userMsg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      promptInput.value = '';
+
+      // Send request
+      const res = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt })
+      });
+
+      const data = await res.json();
+
+      // Bot reply
+      const botMsg = document.createElement("div");
+      botMsg.className = "message bot-message";
+      botMsg.textContent = data.reply;
+      chatBox.appendChild(botMsg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+    // Press Enter to send
+    promptInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        document.getElementById("send-btn").click();
+      }
+    });
+  </script>
+</body>
+</html>
